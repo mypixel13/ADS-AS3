@@ -1,0 +1,38 @@
+#include <iostream>
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int x) {
+        val = x;
+        left = right = NULL;
+    }
+};
+
+int dfs(TreeNode* node, int parent, int len) {
+    if (!node) return len;
+
+    if (node->val == parent + 1) len++;
+    else len = 1;
+
+    int left = dfs(node->left, node->val, len);
+    int right = dfs(node->right, node->val, len);
+
+    return max(len, max(left, right));
+}
+
+int longestConsecutive(TreeNode* root) {
+    if (!root) return 0;
+    return dfs(root, root->val - 1, 0);
+}
+
+int main() {
+    TreeNode* root = new TreeNode(1);
+    root->right = new TreeNode(3);
+    root->right->left = new TreeNode(2);
+    root->right->right = new TreeNode(4);
+
+    cout << longestConsecutive(root);
+}
